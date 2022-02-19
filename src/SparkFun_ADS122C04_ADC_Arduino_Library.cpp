@@ -970,7 +970,7 @@ boolean SFE_ADS122C04::ADS122C04_sendCommandWithValue(uint8_t command, uint8_t v
 // Higher functions will need to take care of converting it to (e.g.) float or int32_t.
 boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversionData, uint8_t *count)
 {
-  uint8_t RXByte[4] = {0};
+  uint8_t RXByte[3] = {0};
 
   _i2cPort->beginTransmission((uint8_t)_deviceAddress);
   _i2cPort->write(ADS122C04_RDATA_CMD);
@@ -1000,8 +1000,8 @@ boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversion
   {
     RXByte[0] = _i2cPort->read(); // Count
     RXByte[1] = _i2cPort->read(); // MSB
-    RXByte[2] = _i2cPort->read();
-    RXByte[3] = _i2cPort->read(); // LSB
+    //RXByte[2] = _i2cPort->read(); //only 16 bits
+    RXByte[2] = _i2cPort->read(); // LSB
     if (_i2cPort->available() > 0)// Note: this _should_ be redundant
     {
       if (_printDebug == true)
@@ -1024,7 +1024,7 @@ boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversion
   }
 
   *count = RXByte[0];
-  *conversionData = ((uint32_t)RXByte[3]) | ((uint32_t)RXByte[2]<<8) | ((uint32_t)RXByte[1]<<16);
+  *conversionData = (((uint32_t)RXByte[2]) | ((uint32_t)RXByte[1]<<8);
   return(true);
 }
 
@@ -1035,7 +1035,8 @@ boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversion
 // Higher functions will need to take care of converting it to (e.g.) float or int32_t.
 boolean SFE_ADS122C04::ADS122C04_getConversionData(uint32_t *conversionData)
 {
-  uint8_t RXByte[3] = {0};
+  uint8_t RXByte[2] = {0};
+  Serial.println("Hello, I2C Bus!");
 
   _i2cPort->beginTransmission((uint8_t)_deviceAddress);
   _i2cPort->write(ADS122C04_RDATA_CMD);
@@ -1056,8 +1057,8 @@ boolean SFE_ADS122C04::ADS122C04_getConversionData(uint32_t *conversionData)
   if (_i2cPort->available() >= 3)
   {
     RXByte[0] = _i2cPort->read(); // MSB
-    RXByte[1] = _i2cPort->read();
-    RXByte[2] = _i2cPort->read(); // LSB
+    //RXByte[1] = _i2cPort->read();
+    RXByte[1] = _i2cPort->read(); // LSB
     if (_i2cPort->available() > 0) // Note: this _should_ be redundant
     {
       if (_printDebug == true)
@@ -1079,6 +1080,6 @@ boolean SFE_ADS122C04::ADS122C04_getConversionData(uint32_t *conversionData)
     return(false);
   }
 
-  *conversionData = ((uint32_t)RXByte[2]) | ((uint32_t)RXByte[1]<<8) | ((uint32_t)RXByte[0]<<16);
+  *conversionData = (((uint32_t)RXByte[1]) | ((uint32_t)RXByte[0]<<8);
   return(true);
 }
