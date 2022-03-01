@@ -34,7 +34,7 @@ void setup(void)
 
   Wire.begin();
 
-  if (mySensor.begin() == false) //Connect to the PT100 using the defaults: Address 0x45 and the Wire port
+  if (mySensor.begin(0x44) == false) //Connect to the PT100 using the defaults: Address 0x45 and the Wire port
   {
     Serial.println(F("Qwiic PT100 not detected at default I2C address. Please check wiring. Freezing."));
     while (1)
@@ -91,15 +91,16 @@ void loop()
   uint32_t raw_ADC_data = mySensor.readADC();
 
   // Print the raw ADC data
-  Serial.print(F("The raw ADC data is 0x"));
-
+  //Serial.print(F("The raw ADC data is 0x"));
+  /*
   // Pad the zeros
   if (raw_ADC_data <= 0xFFFFF) Serial.print(F("0"));
   if (raw_ADC_data <= 0xFFFF) Serial.print(F("0"));
   if (raw_ADC_data <= 0xFFF) Serial.print(F("0"));
   if (raw_ADC_data <= 0xFF) Serial.print(F("0"));
   if (raw_ADC_data <= 0xF) Serial.print(F("0"));
-  Serial.println(raw_ADC_data, HEX);
+  */
+  Serial.println(raw_ADC_data);
 
   delay(250); //Don't pound the I2C bus too hard
 }

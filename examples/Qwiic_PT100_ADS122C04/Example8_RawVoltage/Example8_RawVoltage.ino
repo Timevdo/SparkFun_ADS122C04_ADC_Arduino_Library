@@ -26,8 +26,8 @@
 
 #include <Wire.h>
 
-#include <SparkFun_ADS122C04_ADC_Arduino_Library.h> // Click here to get the library: http://librarymanager/All#SparkFun_ADS122C0
-
+//#include <SparkFun_ADS122C04_ADC_Arduino_Library.h> // Click here to get the library: http://librarymanager/All#SparkFun_ADS122C0
+#include "SparkFun_ADS122C04_ADC_Arduino_Library.h"
 SFE_ADS122C04 mySensor;
 
 void setup(void)
@@ -38,10 +38,8 @@ void setup(void)
   Serial.println(F("Qwiic PT100 Example"));
 
   Wire.begin();
-
-  //mySensor.enableDebugging(); //Uncomment this line to enable debug messages on Serial
-
-  if (mySensor.begin() == false) //Connect to the PT100 using the defaults: Address 0x45 and the Wire port
+  
+  if (mySensor.begin(0x42) == false) //Connect to the PT100 using the defaults: Address 0x45 and the Wire port
   {
     Serial.println(F("Qwiic PT100 not detected at default I2C address. Please check wiring. Freezing."));
     while (1)
@@ -64,13 +62,13 @@ void loop()
   float volts_2 = ((float)raw_v) / 4096000;
 
   // Print the temperature and voltage
-  Serial.print(F("The raw voltage is 0x"));
-  Serial.print(raw_v, HEX);
-  Serial.print(F("\t"));
-  Serial.print(volts_1, 7); // Print the voltage with 7 decimal places
-  Serial.print(F("V\t"));
-  Serial.print(volts_2, 7); // Print the voltage with 7 decimal places
-  Serial.println(F("V"));
+ // Serial.print(F("The raw voltage is 0x"));
+  //Serial.print(raw_v, HEX);
+  //Serial.print(F("\t"));
+ // Serial.print(volts_1, 7); // Print the voltage with 7 decimal places
+  //Serial.print(F("V\t"));
+  Serial.println(volts_2, 7); // Print the voltage with 7 decimal places
+  //Serial.println(F("V"));
 
   delay(250); //Don't pound the I2C bus too hard
 }

@@ -375,6 +375,7 @@ float SFE_ADS122C04::readPT100Fahrenheit(void) // Read the temperature in Fahren
 // The result needs to be multiplied by VREF / GAIN to convert to Volts
 int32_t SFE_ADS122C04::readRawVoltage(uint8_t rate)
 {
+  //Serial.println("MyRawVoltage"); 
   raw_voltage_union raw_v; // union to convert uint32_t to int32_t
   unsigned long start_time = millis(); // Record the start time so we can timeout
   boolean drdy = false; // DRDY (1 == new data is ready)
@@ -1024,7 +1025,7 @@ boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversion
   }
 
   *count = RXByte[0];
-  *conversionData = (((uint32_t)RXByte[2]) | ((uint32_t)RXByte[1]<<8);
+  *conversionData = (((uint32_t)RXByte[2]) | ((uint32_t)RXByte[1]<<8));
   return(true);
 }
 
@@ -1036,7 +1037,7 @@ boolean SFE_ADS122C04::ADS122C04_getConversionDataWithCount(uint32_t *conversion
 boolean SFE_ADS122C04::ADS122C04_getConversionData(uint32_t *conversionData)
 {
   uint8_t RXByte[2] = {0};
-  Serial.println("Hello, I2C Bus!");
+  //Serial.println("Hello, I2C Bus!");
 
   _i2cPort->beginTransmission((uint8_t)_deviceAddress);
   _i2cPort->write(ADS122C04_RDATA_CMD);
@@ -1080,6 +1081,6 @@ boolean SFE_ADS122C04::ADS122C04_getConversionData(uint32_t *conversionData)
     return(false);
   }
 
-  *conversionData = (((uint32_t)RXByte[1]) | ((uint32_t)RXByte[0]<<8);
+  *conversionData = (((uint32_t)RXByte[1]) | ((uint32_t)RXByte[0]<<8));
   return(true);
 }
